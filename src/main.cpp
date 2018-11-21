@@ -13,12 +13,12 @@
 #define WIFI_PASSWORD "G0beyondexpectation!"
 
 //define load cell param
-#define DT 13 // FOR ESP32
-#define SCK 12
+#define DT 17 // FOR ESP32
+#define SCK 16
 #define calibration_factor 21700.0 // can use "-21700" if you get negatif value
 
 //define Firebase param
-String id_device = "id_device_1";
+String id_device = "001";
 
 //define LCD param
 int lcdColumns = 16;
@@ -101,7 +101,7 @@ void loop()
     lcd.setCursor(0, 1);
     lcd.print(weight);
     lcd.print(" Kg");
-    Firebase.pushFloat("/restaurants/smart-scale/" + id_device + "/scale_data", weight);
+    Firebase.setFloat("/restaurants/smart-scale/" + id_device + "/scale_data/weight", weight);
     delay(1000);
     lcd.clear();
   }
