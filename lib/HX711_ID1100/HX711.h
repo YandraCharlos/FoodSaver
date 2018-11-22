@@ -13,8 +13,8 @@ class HX711
 		byte PD_SCK;	// Power Down and Serial Clock Input Pin
 		byte DOUT;		// Serial Data Output Pin
 		byte GAIN;		// amplification factor
-		long OFFSET = 0;	// used for tare weight
-		float SCALE = 1;	// used to return weight in grams, kg, ounces, whatever
+		long OFFSET;	// used for tare weight
+		float SCALE;	// used to return weight in grams, kg, ounces, whatever
 
 	public:
 		// define clock and data pin, channel, and gain factor
@@ -22,12 +22,7 @@ class HX711
 		// gain: 128 or 64 for channel A; channel B works with 32 gain factor only
 		HX711(byte dout, byte pd_sck, byte gain = 128);
 
-		HX711();
-
 		virtual ~HX711();
-
-		// Allows to set the pins and gain later than in the constructor
-		void begin(byte dout, byte pd_sck, byte gain = 128);
 
 		// check if HX711 is ready
 		// from the datasheet: When output data is not ready for retrieval, digital output pin DOUT is high. Serial clock
@@ -58,14 +53,8 @@ class HX711
 		// set the SCALE value; this value is used to convert the raw data to "human readable" data (measure units)
 		void set_scale(float scale = 1.f);
 
-		// get the current SCALE
-		float get_scale();
-
 		// set OFFSET, the value that's subtracted from the actual reading (tare weight)
 		void set_offset(long offset = 0);
-
-		// get the current OFFSET
-		long get_offset();
 
 		// puts the chip into power down mode
 		void power_down();

@@ -2,23 +2,17 @@
 #include <HX711.h>
 
 HX711::HX711(byte dout, byte pd_sck, byte gain) {
-	begin(dout, pd_sck, gain);
-}
-
-HX711::HX711() {
-}
-
-HX711::~HX711() {
-}
-
-void HX711::begin(byte dout, byte pd_sck, byte gain) {
-	PD_SCK = pd_sck;
-	DOUT = dout;
-
+	PD_SCK 	= pd_sck;
+	DOUT 	= dout;
+	
 	pinMode(PD_SCK, OUTPUT);
 	pinMode(DOUT, INPUT);
 
 	set_gain(gain);
+}
+
+HX711::~HX711() {
+
 }
 
 bool HX711::is_ready() {
@@ -44,47 +38,34 @@ void HX711::set_gain(byte gain) {
 
 long HX711::read() {
 	// wait for the chip to become ready
-	while (!is_ready()) {
-		// Will do nothing on Arduino but prevent resets of ESP8266 (Watchdog Issue)
-		yield();
-	}
+	while (!is_ready());
 
-	unsigned long value = 0;
-	uint8_t data[3] = { 0 };
-	uint8_t filler = 0x00;
+	byte data[3];
 
 	// pulse the clock pin 24 times to read the data
-	data[2] = shiftIn(DOUT, PD_SCK, MSBFIRST);
-	data[1] = shiftIn(DOUT, PD_SCK, MSBFIRST);
-	data[0] = shiftIn(DOUT, PD_SCK, MSBFIRST);
+	for (byte j = 3; j--;) {
+		for (char i = 8; i--;) {
+			digitalWrite(PD_SCK, HIGH);
+			bitWrite(data[j], i, digitalRead(DOUT));
+			digitalWrite(PD_SCK, LOW);
+		}
+	}
 
 	// set the channel and the gain factor for the next reading using the clock pin
-	for (unsigned int i = 0; i < GAIN; i++) {
+	for (int i = 0; i < GAIN; i++) {
 		digitalWrite(PD_SCK, HIGH);
 		digitalWrite(PD_SCK, LOW);
 	}
 
-	// Replicate the most significant bit to pad out a 32-bit signed integer
-	if (data[2] & 0x80) {
-		filler = 0xFF;
-	} else {
-		filler = 0x00;
-	}
+	data[2] ^= 0x80;
 
-	// Construct a 32-bit signed integer
-	value = ( static_cast<unsigned long>(filler) << 24
-			| static_cast<unsigned long>(data[2]) << 16
-			| static_cast<unsigned long>(data[1]) << 8
-			| static_cast<unsigned long>(data[0]) );
-
-	return static_cast<long>(value);
+	return ((uint32_t) data[2] << 16) | ((uint32_t) data[1] << 8) | (uint32_t) data[0];
 }
 
 long HX711::read_average(byte times) {
 	long sum = 0;
 	for (byte i = 0; i < times; i++) {
 		sum += read();
-		yield();
 	}
 	return sum / times;
 }
@@ -106,23 +87,15 @@ void HX711::set_scale(float scale) {
 	SCALE = scale;
 }
 
-float HX711::get_scale() {
-	return SCALE;
-}
-
 void HX711::set_offset(long offset) {
 	OFFSET = offset;
 }
 
-long HX711::get_offset() {
-	return OFFSET;
-}
-
 void HX711::power_down() {
 	digitalWrite(PD_SCK, LOW);
-	digitalWrite(PD_SCK, HIGH);
+	digitalWrite(PD_SCK, HIGH);	
 }
 
 void HX711::power_up() {
-	digitalWrite(PD_SCK, LOW);
+	digitalWrite(PD_SCK, LOW);	
 }

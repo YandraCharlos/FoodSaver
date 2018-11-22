@@ -29,6 +29,7 @@ HX711 scale(DT, SCK);
 
 float weight = 0.0; // variabel for scale
 float val;
+float data;
 
 void connect_to_wifi(const char *ssid, const char *password)
 {
@@ -77,33 +78,30 @@ void setup()
 void loop()
 {
   weight = scale.get_units();
-  Serial.println(weight, 3);
-  //val = weight - 38.650; // FIRST VALUE - 38.650
 
   if (weight < 0)
   {
-    Serial.print("Berat ");
+    Serial.print("Berat: ");
     Serial.println("0.00");
-    lcd.setCursor(0, 0);
-    lcd.print("Measurement !!!!");
-    lcd.setCursor(0, 1);
-    lcd.print("0.00 Kg !");
+    // lcd.setCursor(0, 0);
+    // lcd.print("Measurement !!!!");
+    // lcd.setCursor(0, 1);
+    // lcd.print("0.00 Kg !");
     delay(1000);
-    lcd.clear();
+    // lcd.clear();
   }
   else
   {
-    Serial.print("Berat : ");
-    //Serial.println((val * 2), 3);
-    Serial.println(weight, 3);
-    lcd.setCursor(0, 0);
-    lcd.print("Measurement !!!!");
-    lcd.setCursor(0, 1);
-    lcd.print(weight);
-    lcd.print(" Kg");
-    Firebase.setFloat("/restaurants/smart-scale/" + id_device + "/scale_data/weight", weight);
+    Serial.print("Berat: ");
+    Serial.println((weight*2), 2);
+    //Serial.println(weight, 3);
+    // lcd.setCursor(0, 0);
+    // lcd.print("Measurement !!!!");
+    // lcd.setCursor(0, 1);
+    // lcd.print(weight);
+    // lcd.print(" Kg");
+    Firebase.setFloat("/restaurants/smart-scale/" + id_device + "/scale_data/weight", (weight*2));
     delay(1000);
-    lcd.clear();
+    // lcd.clear();
   }
-  delay(500);
 }

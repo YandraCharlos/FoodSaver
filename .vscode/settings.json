@@ -2,5 +2,9 @@
     "terminal.integrated.env.linux": {
         "PATH": "/home/bagus/.platformio/penv/bin:/home/bagus/.platformio/penv:/home/bagus/bin:/home/bagus/.local/bin:/home/bagus/bin:/home/bagus/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
         "PLATFORMIO_CALLER": "vscode"
+    },
+    "terminal.integrated.env.windows": {
+        "PATH": "C:\\Users\\Bukalapak\\.platformio\\penv\\Scripts;C:\\Users\\Bukalapak\\.platformio\\penv;C:\\ProgramData\\Oracle\\Java\\javapath;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;C:\\Program Files\\PuTTY\\;C:\\Users\\Bukalapak\\AppData\\Local\\Microsoft\\WindowsApps;C:\\ProgramData\\Oracle\\Java\\javapath;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;C:\\Program Files\\PuTTY\\;C:\\Users\\Bukalapak\\AppData\\Local\\Microsoft\\WindowsApps",
+        "PLATFORMIO_CALLER": "vscode"
     }
 }
